@@ -1,0 +1,3 @@
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
+export default function PrivacyPage(){return <div className="min-h-screen bg-white"><Navbar/><main className="mx-auto max-w-4xl px-5 py-16"><h1 className="text-4xl font-extrabold text-navy-950">Privacy overview</h1><p className="mt-5 text-sm leading-7 text-slate-600">TechBridge Tn stores account details, student or business profile fields, projects, and applications in its configured database. This starter build has no analytics or payment provider integration. Before public launch, publish a jurisdiction-appropriate privacy notice, define retention and deletion procedures, and configure secure production hosting.</p></main><Footer/></div>;}

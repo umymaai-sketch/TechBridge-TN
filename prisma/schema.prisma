@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  studentProfile StudentProfile?
+  smeProfile     SmeProfile?
+  projects       Project[] @relation("SmeProjects")
+  proposals      Proposal[]
+}
+model StudentProfile {
+  id          String @id @default(cuid())
+  userId      String @unique
+  fullName    String
+  institution String?
+  fieldOfStudy String?
+  skills      String @default("[]")
+  bio         String?
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+model SmeProfile {
+  id             String @id @default(cuid())
+  userId         String @unique
+  companyName    String
+  registrationNo String?
+  industry       String?
+  user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+model Project {
+  id               String @id @default(cuid())
+  title            String
+  category         String
+  description      String
+  requiredSkills   String @default("[]")
+  deliverablesSpec String
+  budgetCents      Int
+  deadline         DateTime
+  status           String @default("draft")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  smeId            String
+  sme              User @relation("SmeProjects", fields: [smeId], references: [id], onDelete: Cascade)
+  proposals        Proposal[]
+  @@index([status, createdAt])
+}
+model Proposal {
+  id          String @id @default(cuid())
+  coverLetter String
+  timelineDays Int
+  status      String @default("pending")
+  createdAt   DateTime @default(now())
+  studentId   String
+  projectId   String
+  student     User @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@unique([studentId, projectId])
+}
+model AuditLog {
+  id        String @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String?
+  createdAt DateTime @default(now())
+}
