@@ -1,17 +1,14 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, BriefcaseBusiness, CheckCircle2, GraduationCap, ShieldCheck, Sparkles, Wallet } from "lucide-react";
-import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/auth";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { ProjectCard } from "@/components/ui/project-card";
 import { Button } from "@/components/ui/button";
-export const dynamic = "force-dynamic";
-export default async function HomePage() {
- const [user, projects] = await Promise.all([
-  getCurrentUser(),
-  prisma.project.findMany({ where: { status: "published" }, orderBy: { createdAt: "desc" }, take: 3, include: { sme: { include: { smeProfile: true } } } })
- ]);
+
+export default function HomePage() {
+ const user = null;
+ const projects: any[] = [];
+
  return <div className="min-h-screen bg-white"><Navbar user={user} />
   <main>
    <section className="relative isolate overflow-hidden bg-navy-gradient text-white">
@@ -34,8 +31,8 @@ export default async function HomePage() {
     <div className="mt-12 grid gap-5 md:grid-cols-3">{[{icon:GraduationCap,title:"For students",desc:"Build experience, show your skills, apply to projects, and grow your professional portfolio.",href:"/register/student",cta:"Create student profile"},{icon:BriefcaseBusiness,title:"For SMEs",desc:"Describe a real business need, review proposals, and work with emerging talent.",href:"/register/sme",cta:"Create business profile"},{icon:ShieldCheck,title:"Transparent process",desc:"Defined budgets, clear milestones, and a straightforward 10% + 5% fee structure.",href:"/terms",cta:"Review the rules"}].map((x,i)=><div key={x.title} className="group rounded-2xl border border-slate-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:shadow-xl"><div className="grid h-12 w-12 place-items-center rounded-2xl bg-navy-950 text-aqua transition group-hover:rotate-3"><x.icon className="h-6 w-6"/></div><h3 className="mt-5 text-lg font-bold text-navy-950">{x.title}</h3><p className="mt-3 min-h-20 text-sm leading-6 text-slate-500">{x.desc}</p><Link href={x.href} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-sky-700">{x.cta}<ArrowRight className="h-4 w-4"/></Link></div>)}</div>
    </div></section>
    <section id="fees" className="px-5 py-20 lg:px-8"><div className="mx-auto max-w-5xl rounded-3xl bg-navy-950 p-8 text-white md:p-12"><div className="grid gap-8 md:grid-cols-[1fr_.8fr] md:items-center"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-aqua">Simple and visible</p><h2 className="mt-3 text-3xl font-extrabold">No surprises on fees.</h2><p className="mt-4 text-sm leading-6 text-slate-300">The intended platform model uses the original agreed project budget to calculate both commissions. Payment processing is not enabled in this starter version, so no real payments are collected.</p></div><div className="grid grid-cols-2 gap-3"><div className="rounded-2xl border border-white/10 bg-white/5 p-5"><p className="text-xs text-slate-400">When publishing</p><p className="mt-2 text-3xl font-extrabold text-aqua">10%</p><p className="mt-2 text-xs text-slate-300">Of original budget</p></div><div className="rounded-2xl border border-white/10 bg-white/5 p-5"><p className="text-xs text-slate-400">At completion</p><p className="mt-2 text-3xl font-extrabold text-aqua">5%</p><p className="mt-2 text-xs text-slate-300">Of original budget</p></div></div></div></div></section>
-   <section className="px-5 pb-20 lg:px-8"><div className="mx-auto max-w-7xl"><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-sky-700">Live opportunities</p><h2 className="mt-2 text-3xl font-extrabold text-navy-950">Recently published projects</h2><p className="mt-3 text-sm text-slate-500">Listings are loaded from the connected database.</p></div><Link href="/projects" className="inline-flex items-center gap-2 text-sm font-bold text-sky-700">Browse all <ArrowRight className="h-4 w-4"/></Link></div>
-    {projects.length ? <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{projects.map(p=><ProjectCard key={p.id} project={p}/>)}</div> : <div className="mt-8 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-14 text-center"><div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white text-slate-400 shadow-sm"><BriefcaseBusiness className="h-6 w-6"/></div><h3 className="mt-4 font-bold text-navy-950">No published projects yet</h3><p className="mx-auto mt-2 max-w-lg text-sm text-slate-500">There are no live listings in the database yet. SMEs can create the first project after registering and signing in.</p><Link href="/register/sme" className="mt-5 inline-flex rounded-xl bg-navy-950 px-5 py-3 text-sm font-semibold text-white hover:bg-navy-800">Join as an SME</Link></div>}
+   <section className="px-5 pb-20 lg:px-8"><div className="mx-auto max-w-7xl"><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-sky-700">Live opportunities</p><h2 className="mt-2 text-3xl font-extrabold text-navy-950">Recently published projects</h2><p className="mt-3 text-sm text-slate-500">Listings are currently hidden in this design preview.</p></div><Link href="/projects" className="inline-flex items-center gap-2 text-sm font-bold text-sky-700">Browse all <ArrowRight className="h-4 w-4"/></Link></div>
+    {projects.length ? <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{projects.map(p=><ProjectCard key={p.id} project={p}/>)}</div> : <div className="mt-8 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-14 text-center"><div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white text-slate-400 shadow-sm"><BriefcaseBusiness className="h-6 w-6"/></div><h3 className="mt-4 font-bold text-navy-950">No published projects yet</h3><p className="mx-auto mt-2 max-w-lg text-sm text-slate-500">Project listings will appear here when the database is connected.</p><Link href="/register/sme" className="mt-5 inline-flex rounded-xl bg-navy-950 px-5 py-3 text-sm font-semibold text-white hover:bg-navy-800">Join as an SME</Link></div>}
    </div></section>
   </main><Footer/></div>;
 }
